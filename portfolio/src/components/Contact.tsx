@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Twitter, Github, Linkedin } from 'lucide-react';
+import { Twitter, Github, Linkedin } from 'lucide-react';
 import ResumeViewer from './ResumeViewer';
 
 const Contact = () => {

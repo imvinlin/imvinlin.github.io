@@ -62,7 +62,7 @@ if (pathname === '/' || pathname === '') {
         <div className="space-y-4 opacity-90">
             <p>Hi, I am Vincent.</p>
           <p>I&apos;m an engineer from UF who spends most of his time figuring out how to make things faster and why they work at all.
-            I like working across the stack -> from GPU kernels to distributed systems to compilers. If it compiles and runs fast, I&apos;m interested.</p>
+            I like working across the stack {'->'} from GPU kernels to distributed systems to compilers. If it compiles and runs fast, I&apos;m interested.</p>
           <p>Most of my work sits at the intersection of ML and systems engineering. I care about building things that actually work in production, not just on a benchmark.
             When I&apos;m not optimizing something, I&apos;m probably building it from scratch.</p>
         </div>
