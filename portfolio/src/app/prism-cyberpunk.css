@@ -1,7 +1,6 @@
-/* Cyberpunk Brutalist Theme for Prism.js */
+/* Code syntax theme */
 code[class*="language-"],
 pre[class*="language-"] {
-  color: #ffffff;
   background: none;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.875rem;
@@ -15,28 +14,42 @@ pre[class*="language-"] {
   hyphens: none;
 }
 
-/* Dark theme styles */
-.dark {
-  --token-comment: #6c6c6c;
-  --token-function: #ffffff;
-  --token-keyword: #ffffff;
-  --token-string: #dfdfdf;
-  --token-variable: #b4b4b4;
-  --token-number: #ffffff;
-  --token-operator: #8d8d8d;
-  --token-punctuation: #8d8d8d;
+/* Dark theme */
+.dark code[class*="language-"],
+.dark pre[class*="language-"],
+.dark pre code {
+  color: #fafafa;
 }
 
-/* Light theme styles */
+.dark {
+  --token-comment: #71717a;
+  --token-function: #34d399;
+  --token-keyword: #f0abfc;
+  --token-string: #fbbf24;
+  --token-variable: #93c5fd;
+  --token-number: #fb923c;
+  --token-operator: #a1a1aa;
+  --token-punctuation: #a1a1aa;
+  --token-tag: #f87171;
+}
+
+/* Light theme */
+:root code[class*="language-"],
+:root pre[class*="language-"],
+pre code {
+  color: #27272a;
+}
+
 :root {
-  --token-comment: #757575;
-  --token-function: #000000;
-  --token-keyword: #000000;
-  --token-string: #2f2f2f;
-  --token-variable: #404040;
-  --token-number: #000000;
-  --token-operator: #666666;
-  --token-punctuation: #666666;
+  --token-comment: #a1a1aa;
+  --token-function: #059669;
+  --token-keyword: #9333ea;
+  --token-string: #b45309;
+  --token-variable: #2563eb;
+  --token-number: #c2410c;
+  --token-operator: #52525b;
+  --token-punctuation: #71717a;
+  --token-tag: #dc2626;
 }
 
 .token.comment,
@@ -103,28 +116,17 @@ pre[class*="language-"] {
   font-style: italic;
 }
 
-/* Add glitch effect on hover */
-pre[class*="language-"]:hover .line-highlight {
-  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+/* Override prose styling on code blocks */
+.prose pre code,
+.prose pre {
+  color: inherit;
 }
-
-@keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    transform: translate(-2px, -2px);
-  }
-  60% {
-    transform: translate(2px, 2px);
-  }
-  80% {
-    transform: translate(2px, -2px);
-  }
-  100% {
-    transform: translate(0);
-  }
+.prose pre {
+  background-color: #f4f4f5;
+}
+.dark .prose pre {
+  background-color: #18181b;
+}
+.dark .prose pre code {
+  color: #fafafa;
 }

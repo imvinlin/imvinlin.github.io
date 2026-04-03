@@ -35,7 +35,7 @@ const renderer = new marked.Renderer();
 // Custom code block renderer
 renderer.code = ({ text, lang }: Tokens.Code) => {
   if (!lang) {
-    return `<pre class="my-4 p-4 bg-black/5 dark:bg-white/5 rounded-lg overflow-x-auto"><code>${text}</code></pre>`;
+    return `<pre class="my-4 p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg overflow-x-auto"><code>${text}</code></pre>`;
   }
 
   // Ensure the language is loaded in Prism
@@ -49,25 +49,7 @@ renderer.code = ({ text, lang }: Tokens.Code) => {
   );
 
   // Return the highlighted code with cyberpunk styling
-  return `
-    <div class="relative my-4 group">
-      <div class="absolute -inset-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-      <div class="relative">
-        <div class="flex items-center justify-between px-4 py-2 bg-black/10 dark:bg-white/10 border-b border-black/20 dark:border-white/20">
-          <span class="text-sm opacity-60">${validLanguage}</span>
-          <button 
-            class="px-2 py-1 text-xs border border-transparent hover:border-current opacity-60 hover:opacity-100 transition-all duration-200"
-            onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)"
-          >
-            Copy
-          </button>
-        </div>
-        <pre class="p-4 bg-black/5 dark:bg-white/5 overflow-x-auto">
-          <code class="language-${validLanguage}">${highlightedCode}</code>
-        </pre>
-      </div>
-    </div>
-  `;
+  return `<div class="relative my-4 group"><div class="absolute -inset-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div><div class="relative"><div class="flex items-center justify-between px-4 py-2 bg-zinc-200 dark:bg-zinc-800 border-b border-zinc-300 dark:border-zinc-700"><span class="text-sm opacity-60">${validLanguage}</span><button class="px-2 py-1 text-xs border border-transparent hover:border-current opacity-60 hover:opacity-100 transition-all duration-200" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)">Copy</button></div><pre class="p-4 bg-zinc-100 dark:bg-zinc-900 overflow-x-auto"><code class="language-${validLanguage}">${highlightedCode}</code></pre></div></div>`;
 };
 
 renderer.image = (image: Tokens.Image) => {
@@ -115,10 +97,15 @@ renderer.image = (image: Tokens.Image) => {
 
 // TOC collector - reset per post
 let tocCollector: TocItem[] = [];
+let headingCount: Record<string, number> = {};
 
 renderer.heading = ({ text, depth }: Tokens.Heading) => {
-  const id = text.toLowerCase().replace(/[^\w]+/g, '-').replace(/(^-|-$)/g, '');
-  tocCollector.push({ id, text, level: depth });
+  const baseId = text.toLowerCase().replace(/[^\w]+/g, '-').replace(/(^-|-$)/g, '');
+  headingCount[baseId] = (headingCount[baseId] || 0) + 1;
+  const id = headingCount[baseId] > 1 ? `${baseId}-${headingCount[baseId]}` : baseId;
+  if (depth === 1) {
+    tocCollector.push({ id, text, level: depth });
+  }
   return `<h${depth} id="${id}">${text}</h${depth}>`;
 };
 
@@ -136,8 +123,9 @@ export const getPostBySlug = cache(async (slug: string): Promise<BlogPost> => {
     const fileContents = await readFile(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
 
-    // Reset TOC collector before parsing
+    // Reset TOC collector and heading counter before parsing
     tocCollector = [];
+    headingCount = {};
     const parsedContent = marked.parse(content, { async: false }) as string;
     const tocItems = [...tocCollector];
 
